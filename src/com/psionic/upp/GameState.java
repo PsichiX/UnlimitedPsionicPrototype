@@ -15,6 +15,7 @@ import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Material;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Scene;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Sprite;
 import com.PsichiX.XenonCoreDroid.XeEcho.*;
+import com.psionic.upp.helper.SpriteSheet;
 
 public class GameState extends State
 {
@@ -31,7 +32,7 @@ public class GameState extends State
 	Material rocketMat;
 	Image rocketImg;
 	
-	Actor player;
+	Player player;
 	
 	public static ArrayList<Actor> actors = new ArrayList<Actor>();
 	
@@ -45,11 +46,19 @@ public class GameState extends State
 		cam = (Camera2D)scn.getCamera();
 		cam.setViewPosition(cam.getViewWidth() * 0.5f, cam.getViewHeight() * 0.5f);
 		
+		// dynamic actors spritesheet
+		//SpriteSheet sheet = (SpriteSheet)getApplication().getAssets().get(R.raw.dynamics, SpriteSheet.class);
+		
+		// background scroll
 		background = new Background(getApplication().getAssets(),cam);
+		scn.attach(background);
 		
 		distance = 0.0f;
 		
-		Material mat = (Material) getApplication().getAssets().get(R.raw.proto_material, Material.class);
+		player = new Player(getApplication().getAssets(), R.raw.dynamics, "proto.png");
+		scn.attach(player);
+		
+		/*Material mat = (Material) getApplication().getAssets().get(R.raw.proto_material, Material.class);
 		Image actImg = (Image) getApplication().getAssets().get(R.drawable.proto, Image.class);
 		player = new Actor(mat,actImg);
 
@@ -59,9 +68,15 @@ public class GameState extends State
 		scn.attach(player);
 		
 		rocketMat = (Material) getApplication().getAssets().get(R.raw.rocket_material, Material.class);
-		rocketImg = (Image) getApplication().getAssets().get(R.drawable.rocket, Image.class);
-		
-		
+		rocketImg = (Image) getApplication().getAssets().get(R.drawable.rocket, Image.class);*/
+
+//		Material mat = (Material)getApplication().getAssets().get(R.raw.material, Material.class);
+//		Sprite spr = new Sprite(mat);
+//		SpriteSheet sheet = (SpriteSheet)getApplication().getAssets().get(R.raw.spritesheet, SpriteSheet.class);
+//		SpriteSheet.SubImage sub = sheet.getSubImage("schroom.png");
+//		sub.apply(spr);
+//		
+//		scn.attach(spr);
 	}
 
 	@Override

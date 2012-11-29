@@ -4,6 +4,8 @@ import com.PsichiX.XenonCoreDroid.XeActivity;
 import com.PsichiX.XenonCoreDroid.XeApplication;
 import com.PsichiX.XenonCoreDroid.HighLevel.Utils;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics;
+import com.psionic.upp.helper.SpriteSheet;
+
 import android.os.Bundle;
 
 public class MainActivity extends XeActivity
@@ -22,9 +24,10 @@ public class MainActivity extends XeActivity
 		// run state
 		Utils.initModule(getApplicationCore().getAssets());
 		Graphics.initModule(getApplicationCore().getAssets(), getApplicationCore().getPhoton());
+		getApplicationCore().getAssets().registerClass(SpriteSheet.class);
 		getApplicationCore().getTimer().setFixedStep(1000 / 30);
 		getApplicationCore().getPhoton().getRenderer().getTimer().setFixedStep(1000 / 30);
-		getApplicationCore().getPhoton().getRenderer().setClearBackground(true,0.0f,0.0f,0.0f,1.0f);
+		getApplicationCore().getPhoton().getRenderer().setClearBackground(true,0.0f,0.0f,1.0f,1.0f);
 		//getApplicationCore().acquireWakeLock();
 		getApplicationCore().run(new MenuState());
 	}

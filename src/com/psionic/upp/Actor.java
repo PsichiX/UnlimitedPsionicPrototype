@@ -3,10 +3,12 @@ package com.psionic.upp;
 import android.util.Log;
 
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Camera2D;
+import com.PsichiX.XenonCoreDroid.XeAssets;
 import com.PsichiX.XenonCoreDroid.XeUtils.Matrix;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Image;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Material;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Sprite;
+import com.psionic.upp.helper.SpriteSheet;
 
 public class Actor extends Sprite {
 	
@@ -19,13 +21,10 @@ public class Actor extends Sprite {
 	
 	boolean canGravity = true;
 	
-	public Actor(Material mat) {
-		super(mat);
-	}
-	
-	public Actor(Material mat, Image img){
-		super(mat);
-		setSizeFromImage(img);
+	public Actor(XeAssets assets, int sheetResId, String subImage) {
+		super(null);
+		SpriteSheet sheet = (SpriteSheet)assets.get(sheetResId, SpriteSheet.class);
+		sheet.getSubImage(subImage).apply(this);
 		setOffsetFromSize(0.5f, 0.5f);
 	}
 	
