@@ -12,6 +12,7 @@ public class Rocket extends Actor
 		super(assets, sheetResId, subImage);
 	}
 	
+	@Override
 	public void update(float dt, Matrix cam){
 		setGravityY(-gravityYconst*dt);
 		super.update(dt, cam);

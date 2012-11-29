@@ -3,10 +3,10 @@ package com.psionic.upp;
 import android.util.Log;
 
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Camera2D;
+import com.PsichiX.XenonCoreDroid.XeApplication.Touch;
+import com.PsichiX.XenonCoreDroid.XeApplication.Touches;
 import com.PsichiX.XenonCoreDroid.XeAssets;
 import com.PsichiX.XenonCoreDroid.XeUtils.Matrix;
-import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Image;
-import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Material;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Sprite;
 import com.psionic.upp.helper.SpriteSheet;
 
@@ -55,6 +55,7 @@ public class Actor extends Sprite {
 		return radius;
 	}
 	
+	@Override
 	public void update(float dt, Matrix cam){
 		
 		Camera2D camera = (Camera2D)(getScene().getCamera());
@@ -71,13 +72,21 @@ public class Actor extends Sprite {
 			setPosition(getPositionX(),camera.getViewHeight() - getHeight()*0.5f);
 		} else if(getPositionY() < getHeight()*0.5f){
 			gravityY = 0.0f;
-			setPosition(getPositionX(), getHeight()*0.5f + 2.0f);
+			setPosition(getPositionX(), getHeight()*0.5f);
 		}
+		
+		if(getPositionX() < camera.getViewPositionX() - camera.getViewWidth() - getWidth())
+			kill();
 		
 		super.update(dt, cam);
 	}
 	
-	public void testCollisionWith(Actor actor){
+	public void input(Touches touches)
+	{
+	}
+	
+	public void testCollisionWith(Actor actor)
+	{
 		float sum_r = radius + actor.getRadius();
 		float dx = getPositionX() - actor.getPositionX();
 		float dy = getPositionY() - actor.getPositionY();
@@ -85,15 +94,17 @@ public class Actor extends Sprite {
 		if(sum_r*sum_r > (dx*dx + dy*dy))
 			actor.onCollisionWith(this);
 		
-		Log.w("collision test","sum_r:" + sum_r);
-		Log.w("collision test","dx:" + dx + " dy:"+dy);
+		//Log.w("collision test","sum_r:" + sum_r);
+		//Log.w("collision test","dx:" + dx + " dy:"+dy);
 	}
 	
-	public void onCollisionWith(Actor actor){
+	public void onCollisionWith(Actor actor)
+	{
 		Log.d("COLLISION","COLLISION");
 	}
 		
-	public void hitted() {
+	public void kill()
+	{
 		GameState.hitAct.add(this);
 	}
 

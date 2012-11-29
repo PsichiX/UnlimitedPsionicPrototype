@@ -134,24 +134,8 @@ public class GameState extends State
 			accel = 0.0f;
 		}
 		
-		Iterator<Actor> it = actors.iterator();
-		
-		while(it.hasNext()){
-			Actor a = (Actor) it.next();
-			if(a.getPositionX() < cam.getViewPositionX() - cam.getViewWidth() - a.getWidth())
-			{
-				scn.detach(a);
-				it.remove();
-			}
-		}
-		
-		Iterator<Actor> itHitAct = hitAct.iterator();
-		while(itHitAct.hasNext()){
-			Actor a = (Actor) itHitAct.next();
+		for(Actor a : hitAct)
 			scn.detach(a);
-			itHitAct.remove();
-		}
-		
 		hitAct.clear();
 	}
 
