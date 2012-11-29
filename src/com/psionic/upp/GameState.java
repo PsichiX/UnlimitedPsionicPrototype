@@ -17,8 +17,6 @@ public class GameState extends State
 		scn = (Scene)getApplication().getAssets().get(R.raw.scene, Scene.class);
 		cam = (Camera2D)scn.getCamera();
 		cam.setViewPosition(cam.getViewWidth() * 0.5f, cam.getViewHeight() * 0.5f);
-
-
 	}
 
 	@Override
@@ -30,7 +28,8 @@ public class GameState extends State
 	@Override
 	public void onUpdate()
 	{
-		float dt = 1.0f / 30.0f;
+		//float dt = 1.0f / 30.0f;
+		float dt = getApplication().getTimer().getDeltaTime() * 0.001f;
 
 		scn.update(dt);
 	}
