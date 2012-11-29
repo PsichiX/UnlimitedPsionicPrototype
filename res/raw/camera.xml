@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<Camera2D
+   aspect="SCREEN"
+   zoomOut="600"
+   x="0"
+   y="0"
+   angle="0"
+/>

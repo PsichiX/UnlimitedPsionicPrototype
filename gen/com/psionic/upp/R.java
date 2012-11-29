@@ -14,18 +14,26 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int menu_settings=0x7f070000;
+        public static final int menu_settings=0x7f080000;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
     }
     public static final class menu {
-        public static final int activity_main=0x7f060000;
+        public static final int activity_main=0x7f070000;
+    }
+    public static final class raw {
+        public static final int camera=0x7f040000;
+        public static final int color_shader=0x7f040001;
+        public static final int joystick_material=0x7f040002;
+        public static final int joystick_shader=0x7f040003;
+        public static final int material=0x7f040004;
+        public static final int scene=0x7f040005;
     }
     public static final class string {
-        public static final int app_name=0x7f040000;
-        public static final int hello_world=0x7f040001;
-        public static final int menu_settings=0x7f040002;
+        public static final int app_name=0x7f050000;
+        public static final int hello_world=0x7f050001;
+        public static final int menu_settings=0x7f050002;
     }
     public static final class style {
         /** 
@@ -43,10 +51,10 @@ public final class R {
     
  API 11 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f050000;
+        public static final int AppBaseTheme=0x7f060000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f050001;
+        public static final int AppTheme=0x7f060001;
     }
 }
