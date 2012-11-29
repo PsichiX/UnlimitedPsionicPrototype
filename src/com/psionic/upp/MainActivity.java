@@ -26,6 +26,6 @@ public class MainActivity extends XeActivity
 		getApplicationCore().getPhoton().getRenderer().getTimer().setFixedStep(1000 / 30);
 		getApplicationCore().getPhoton().getRenderer().setClearBackground(true,0.0f,0.0f,0.0f,1.0f);
 		//getApplicationCore().acquireWakeLock();
-		getApplicationCore().run(new GameState());
+		getApplicationCore().run(new MenuState());
 	}
 }

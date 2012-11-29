@@ -14,6 +14,7 @@ import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Image;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Material;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Scene;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Sprite;
+import com.PsichiX.XenonCoreDroid.XeEcho.*;
 
 public class GameState extends State
 {
@@ -37,6 +38,9 @@ public class GameState extends State
 	@Override
 	public void onEnter()
 	{
+		Music m = getApplication().getEcho().loadMusic("background_sound", R.raw.am_bg_sound);
+		m.play();
+		
 		scn = (Scene)getApplication().getAssets().get(R.raw.scene, Scene.class);
 		cam = (Camera2D)scn.getCamera();
 		cam.setViewPosition(cam.getViewWidth() * 0.5f, cam.getViewHeight() * 0.5f);
@@ -75,13 +79,10 @@ public class GameState extends State
 		background.setOnDistance(distance);
 		Random r = new Random();
 		
-//		float rf = r.nextFloat() * 100;
-//		
-//		if(rf > 80){
-//			Actor enemy = new Actor(rocketMat,rocketImg);
-//			enemy.setPosition(cam.getViewWidth() - , arg1)
-//		}
+		cam.setViewPosition(cam.getViewWidth()*0.5f + distance, cam.getViewHeight()*0.5f);
+		background.setPosition(cam.getViewPositionX(), cam.getViewPositionY());
 		
+		player.setPosition(distance + player.getWidth(), player.getPositionY());
 		if(isFly)
 			player.setGravityY(player.getGravityY() - 50.0f);
 		
@@ -109,6 +110,8 @@ public class GameState extends State
 	@Override
 	public void onExit()
 	{
+		getApplication().getEcho().getMusic("background_sound").stop();
+		getApplication().getEcho().unloadAll();
 		actors.clear();
 	}
 }

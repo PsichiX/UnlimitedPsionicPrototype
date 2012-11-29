@@ -22,6 +22,7 @@ public class Background extends Sprite {
 		setMaterial(bgMat);
 		setSize(cam.getViewWidth(), cam.getViewHeight());
 		setTextureScaleFromImageAspect(bgImage, true);
+		setOffsetFromSize(0.5f, 0.5f);
 	}
 	
 	public void setOnDistance(float distance) {
