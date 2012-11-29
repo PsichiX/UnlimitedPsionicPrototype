@@ -8,11 +8,11 @@ import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Sprite;
 
 public class Background extends Sprite {
 
+	float size;
+	
 	public Background(Material mat) {
 		super(mat);
 	}
-	
-	float size;
 	
 	public Background(XeAssets assets, Camera2D cam){
 		super(null);

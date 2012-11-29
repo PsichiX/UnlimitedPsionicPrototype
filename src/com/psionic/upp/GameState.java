@@ -1,6 +1,10 @@
 package com.psionic.upp;
 
 
+import java.util.ArrayList;
+
+import android.util.Log;
+
 import com.PsichiX.XenonCoreDroid.XeApplication.State;
 import com.PsichiX.XenonCoreDroid.XeApplication.Touches;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Camera2D;
@@ -19,6 +23,8 @@ public class GameState extends State
 	float distance;
 	float speed = 100.0f;
 	
+	public static ArrayList<Actor> actors = new ArrayList<Actor>();
+	
 	@Override
 	public void onEnter()
 	{
@@ -30,7 +36,13 @@ public class GameState extends State
 		
 		distance = 0.0f;
 		
+		Material mat = (Material) getApplication().getAssets().get(R.raw.proto_material, Material.class);
+		Image actImg = (Image) getApplication().getAssets().get(R.drawable.proto, Image.class);
+		Actor a = new Actor(mat,actImg);
+		actors.add(a);
+		a.setPosition(cam.getViewWidth() * 0.5f, cam.getViewHeight() * 0.5f);
 		scn.attach(background);
+		scn.attach(a);
 	}
 
 	@Override
@@ -47,6 +59,15 @@ public class GameState extends State
 		distance += dt * speed;
 		background.setOnDistance(distance);
 		
+		for(Actor actA : actors){
+			for(Actor actB : actors){
+				if(actA != actB)
+					if(actA.collisionWith(actB)){
+						Log.d("COLLISION","COLLISION");
+					}
+			}
+		}
+		
 		scn.update(dt);
 	}
 
@@ -58,5 +79,6 @@ public class GameState extends State
 	@Override
 	public void onExit()
 	{
+		actors.clear();
 	}
 }
