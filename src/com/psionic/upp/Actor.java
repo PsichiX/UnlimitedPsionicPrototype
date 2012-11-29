@@ -26,6 +26,8 @@ public class Actor extends Sprite {
 		SpriteSheet sheet = (SpriteSheet)assets.get(sheetResId, SpriteSheet.class);
 		sheet.getSubImage(subImage).apply(this);
 		setOffsetFromSize(0.5f, 0.5f);
+		
+		radius = getHeight();
 	}
 	
 	public void setMovement(float[] mv) {
@@ -82,10 +84,17 @@ public class Actor extends Sprite {
 		
 		if(sum_r*sum_r > (dx*dx + dy*dy))
 			actor.onCollisionWith(this);
+		
+		Log.w("collision test","sum_r:" + sum_r);
+		Log.w("collision test","dx:" + dx + " dy:"+dy);
 	}
 	
 	public void onCollisionWith(Actor actor){
 		Log.d("COLLISION","COLLISION");
+	}
+		
+	public void hitted() {
+		GameState.hitAct.add(this);
 	}
 
 }

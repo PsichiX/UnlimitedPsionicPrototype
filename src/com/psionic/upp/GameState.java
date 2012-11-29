@@ -2,6 +2,7 @@ package com.psionic.upp;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 import android.util.Log;
@@ -9,6 +10,8 @@ import android.util.Log;
 import com.PsichiX.XenonCoreDroid.XeApplication.State;
 import com.PsichiX.XenonCoreDroid.XeApplication.Touch;
 import com.PsichiX.XenonCoreDroid.XeApplication.Touches;
+import com.PsichiX.XenonCoreDroid.XeUtils.CommandQueue;
+import com.PsichiX.XenonCoreDroid.XeUtils.RunnableQueue;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Camera2D;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Image;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Material;
@@ -31,6 +34,12 @@ public class GameState extends State
 	
 	Material rocketMat;
 	Image rocketImg;
+	
+	float accel = 0.0f;
+	
+	//public static RunnableQueue rq = new RunnableQueue();
+	
+	public static ArrayList<Actor> hitAct = new ArrayList<Actor>();
 	
 	Player player;
 	
@@ -92,7 +101,8 @@ public class GameState extends State
 		float dt = getApplication().getTimer().getDeltaTime() * 0.001f;
 		distance += dt * speed;
 		background.setOnDistance(distance);
-		Random r = new Random();
+		
+		accel += dt;
 		
 		cam.setViewPosition(cam.getViewWidth()*0.5f + distance, cam.getViewHeight()*0.5f);
 		background.setPosition(cam.getViewPositionX(), cam.getViewPositionY());
@@ -101,14 +111,48 @@ public class GameState extends State
 		if(isFly)
 			player.setGravityY(player.getGravityY() - 50.0f);
 		
-		for(Actor actA : actors){
-			for(Actor actB : actors){
-				if(actA != actB)
-					actA.testCollisionWith(actB);
-			}
+//		for(Actor actA : actors){
+//			for(Actor actB : actors){
+//				if(actA != actB && )
+//					actA.testCollisionWith(actB);
+//			}
+		
+		for(Actor a: actors)
+		{
+			a.testCollisionWith(player);
 		}
 		
 		scn.update(dt);
+		
+		if(accel > 4.0f){
+			Rocket rocket = new Rocket(getApplication().getAssets(), R.raw.dynamics, "rocket.png");
+			rocket.setPosition(cam.getViewPositionX() + cam.getViewWidth()*0.5f + rocket.getWidth(), new Random().nextFloat() * cam.getViewHeight());
+			rocket.setMovement(new float[] {-5.0f * new Random().nextFloat()*50,0.0f});
+			actors.add(rocket);
+			scn.attach(rocket);
+			
+			accel = 0.0f;
+		}
+		
+		Iterator<Actor> it = actors.iterator();
+		
+		while(it.hasNext()){
+			Actor a = (Actor) it.next();
+			if(a.getPositionX() < cam.getViewPositionX() - cam.getViewWidth() - a.getWidth())
+			{
+				scn.detach(a);
+				it.remove();
+			}
+		}
+		
+		Iterator<Actor> itHitAct = hitAct.iterator();
+		while(itHitAct.hasNext()){
+			Actor a = (Actor) itHitAct.next();
+			scn.detach(a);
+			itHitAct.remove();
+		}
+		
+		hitAct.clear();
 	}
 
 	@Override
@@ -128,5 +172,7 @@ public class GameState extends State
 		getApplication().getEcho().getMusic("background_sound").stop();
 		getApplication().getEcho().unloadAll();
 		actors.clear();
+		
+		scn.detachAll();
 	}
 }
