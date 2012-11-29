@@ -10,7 +10,7 @@ import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Sprite;
 
 public class Actor extends Sprite {
 	
-	public static final float gravityYconst = 100.0f;
+	public static final float gravityYconst = 350.0f;
 	
 	float [] movement = new float[] { 0.0f, 0.0f };
 	float gravityY = 0.0f;

@@ -83,7 +83,7 @@ public class GameState extends State
 //		}
 		
 		if(isFly)
-			player.setGravityY(player.getGravityY() - 10.0f);
+			player.setGravityY(player.getGravityY() - 50.0f);
 		
 		for(Actor actA : actors){
 			for(Actor actB : actors){
