@@ -2,6 +2,8 @@ package com.psionic.upp;
 
 import java.util.LinkedList;
 
+import android.util.Log;
+
 import com.PsichiX.XenonCoreDroid.XeApplication.Touches;
 import com.PsichiX.XenonCoreDroid.XeAssets;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Camera2D;
@@ -59,6 +61,7 @@ public class ActorsManager
 				a.onAttach(this);
 			}
 		}
+		actorsToAttach.clear();
 		for(Actor a : actorsToDetach)
 		{
 			if(actors.contains(a))
@@ -68,11 +71,13 @@ public class ActorsManager
 				a.onDetach(this);
 			}
 		}
+		actorsToDetach.clear();
+	
 		scene.update(dt);
 		for(Actor a1 : actors)
 			for(Actor a2 : actors)
 				if(a1 != a2)
-					a1.testCollisionWith(a2);
+					a1.bboxTestCollisionWith(a2);
 	}
 	
 	public void input(Touches touches)

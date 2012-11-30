@@ -18,7 +18,10 @@ public class Actor extends Sprite {
 	protected SpriteSheet sheet;
 	private float[] movement = new float[]{0.0f, 0.0f};
 	private float gravityY = 0.0f;
-	private float radius;
+	private float bboxMinX = 0.0f;
+	private float bboxMinY = 0.0f;
+	private float bboxMaxX = 0.0f;
+	private float bboxMaxY = 0.0f;
 	
 	public Actor(XeAssets assets, int sheetResId, String subImage)
 	{
@@ -26,8 +29,7 @@ public class Actor extends Sprite {
 		sheet = (SpriteSheet)assets.get(sheetResId, SpriteSheet.class);
 		sheet.getSubImage(subImage).apply(this);
 		setOffsetFromSize(0.5f, 0.5f);
-		
-		radius = MathHelper.vecLength(getWidth() * 0.5f, getHeight() * 0.5f, 0.0f);
+		setBoundingBox(-getOffsetX(), -getOffsetY(), -getOffsetX() + getWidth(), -getOffsetY() + getHeight());
 	}
 	
 	public void onAttach(ActorsManager man)
@@ -43,6 +45,47 @@ public class Actor extends Sprite {
 	public ActorsManager getOwner()
 	{
 		return owner;
+	}
+	
+	public void setBoundingBox(float minX, float minY, float maxX, float maxY)
+	{
+		bboxMinX = minX;
+		bboxMinY = minY;
+		bboxMaxX = maxX;
+		bboxMaxY = maxY;
+	}
+	
+	public float[] getBoundingBoxModel()
+	{
+		return new float[]{
+			bboxMinX,
+			bboxMinY,
+			bboxMaxX,
+			bboxMaxY
+		};
+	}
+	
+	public float[] getBoundingBoxWorld()
+	{
+		return new float[]{
+			bboxMinX + getPositionX(),
+			bboxMinY + getPositionY(),
+			bboxMaxX + getPositionX(),
+			bboxMaxY + getPositionY()
+		};
+	}
+	
+	public void bboxTestCollisionWith(Actor a)
+	{
+		float[] abbox = a.getBoundingBoxWorld();
+		float[] mbbox = getBoundingBoxWorld();
+		if(	mbbox[0] < abbox[2] &&
+			mbbox[1] < abbox[3] &&
+			mbbox[2] > abbox[0] &&
+			mbbox[3] > abbox[1] )
+		{
+			a.onCollisionWith(this);
+		}
 	}
 	
 	public float[] calculateMinMaxPosition()
@@ -74,14 +117,6 @@ public class Actor extends Sprite {
 	public float getGravityY()
 	{
 		return gravityY;
-	}
-	
-	public void setRadius(float r){
-		radius = r;
-	}
-	
-	public float getRadius(){
-		return radius;
 	}
 	
 	@Override
@@ -116,19 +151,9 @@ public class Actor extends Sprite {
 	{
 	}
 	
-	public void testCollisionWith(Actor actor)
-	{
-		float sum_r = radius + actor.getRadius();
-		float dx = getPositionX() - actor.getPositionX();
-		float dy = getPositionY() - actor.getPositionY();
-		
-		if(sum_r*sum_r > (dx*dx + dy*dy))
-			onCollisionWith(actor);
-	}
-	
 	public void onCollisionWith(Actor actor)
 	{
-		//Log.d("COLLISION","COLLISION");
+		Log.d("COLLISION","COLLISION");
 	}
 		
 	public void kill()

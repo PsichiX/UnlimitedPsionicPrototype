@@ -10,14 +10,17 @@ import com.PsichiX.XenonCoreDroid.XeEcho.*;
 
 public class GameState extends State
 {
-	BackgroundChain.Pattern[] bgPatterns;
+	//BackgroundChain.Pattern[] bgPatterns;
 	ActorsManager actors;
 	Player player;
+	Background bg;
 	
 	boolean isFly = false;
-	float distance;
-	float speed = 100.0f;
+	float distance = 0.0f;
+	float speed = 500.0f;
 	float accel = 0.0f;
+	
+	float accel_obstacle = 0.0f;
 	
 	@Override
 	public void onEnter()
@@ -28,7 +31,8 @@ public class GameState extends State
 		actors = new ActorsManager(getApplication().getAssets(), R.raw.scene);
 		Camera2D cam = (Camera2D)actors.getScene().getCamera();
 		
-		bgPatterns = new BackgroundChain.Pattern[]{
+		
+		/*bgPatterns = new BackgroundChain.Pattern[]{
 			new BackgroundChain.Pattern("bg_floor.png", -68.0f, 0.0f, 212.0f, 0.0f, 281.0f, 170.0f),
 			new BackgroundChain.Pattern("bg_ground.jpg", 0.0f, 0.0f, 456.0f, 0.0f, 458.0f, 175.0f),
 			new BackgroundChain.Pattern("bg_roof_cables.png", -68.0f, 0.0f, 424.0f, 0.0f, 493.0f, 304.0f),
@@ -36,78 +40,68 @@ public class GameState extends State
 			new BackgroundChain.Pattern("bg_wall.jpg", 0.0f, 0.0f, cam.getViewWidth(), 0.0f, cam.getViewWidth(), 585.0f),
 			new BackgroundChain.Pattern("bg_wall_down.jpg", 0.0f, 0.0f, cam.getViewWidth(), 0.0f, cam.getViewWidth(), 60.0f),
 			new BackgroundChain.Pattern("bg_wall_up.jpg", -68.0f, 0.0f, 210.0f, 0.0f, 212.0f, 59.0f)
-		};
+		};*/
 		
 		distance = 0.0f;
 		
-		Decal decal = new Decal(getApplication().getAssets(), R.raw.dynamics);
+		bg = new Background(getApplication().getAssets(), cam);
+		actors.getScene().attach(bg);
+		
+		//Decal decal = new Decal(getApplication().getAssets(), R.raw.dynamics);
 		/*decal.build(new Decal.BuildInfo(new Decal.BuildInfo.ImageInfo[]{
 			new Decal.BuildInfo.ImageInfo("bg_doors.png", 0.0f, 0.0f, 0.0f, 0.0f),
 			new Decal.BuildInfo.ImageInfo("bg_window.png", 300.0f, 0.0f, 0.0f, 0.0f),
 			new Decal.BuildInfo.ImageInfo("bg_ground.jpg", 150.0f, 300.0f, 0.0f, 0.0f)
 		}));*/
-		BackgroundChain chain = new BackgroundChain(new BackgroundChain.Layer[]{
-			new BackgroundChain.Layer(new String[]{
-				"bg_ground.jpg",
-				"bg_ground.jpg",
-				"bg_ground.jpg",
-				"bg_ground.jpg"
-			}, 0.0f, 0.0f),
-			new BackgroundChain.Layer(new String[]{
-				"bg_wall.jpg"
-			}, 0.0f, 398.0f),
-			new BackgroundChain.Layer(new String[]{
-				"bg_wall_up.jpg",
-				"bg_wall_up.jpg",
-				"bg_wall_up.jpg",
-				"bg_wall_up.jpg",
-				"bg_wall_up.jpg",
-				"bg_wall_up.jpg",
-				"bg_wall_up.jpg",
-				"bg_wall_up.jpg"
-			}, 0.0f, 345.0f),
-			new BackgroundChain.Layer(new String[]{
-				"bg_wall_down.jpg"
-			}, 0.0f, 980.0f),
-			new BackgroundChain.Layer(new String[]{
-				"bg_roof_lights.png",
-				"bg_roof_lights.png",
-				"bg_roof_lights.png",
-				"bg_roof_cables.png",
-				"bg_roof_lights.png",
-				"bg_roof_lights.png",
-				"bg_roof_lights.png"
-			}, 0.0f, 175.0f),
-			new BackgroundChain.Layer(new String[]{
-				"bg_floor.png",
-				"bg_floor.png",
-				"bg_floor.png",
-				"bg_floor.png",
-				"bg_floor.png",
-				"bg_floor.png",
-				"bg_floor.png",
-				"bg_floor.png"
-			}, 0.0f, 1035.0f)
-		});
-		chain.buildDecal(bgPatterns, decal);
-		actors.getScene().attach(decal);
+//		BackgroundChain chain = new BackgroundChain(new BackgroundChain.Layer[]{
+//			new BackgroundChain.Layer(new String[]{
+//				"bg_ground.jpg",
+//				"bg_ground.jpg",
+//				"bg_ground.jpg",
+//				"bg_ground.jpg"
+//			}, 0.0f, 0.0f),
+//			new BackgroundChain.Layer(new String[]{
+//				"bg_wall.jpg"
+//			}, 0.0f, 398.0f),
+//			new BackgroundChain.Layer(new String[]{
+//				"bg_wall_up.jpg",
+//				"bg_wall_up.jpg",
+//				"bg_wall_up.jpg",
+//				"bg_wall_up.jpg",
+//				"bg_wall_up.jpg",
+//				"bg_wall_up.jpg",
+//				"bg_wall_up.jpg",
+//				"bg_wall_up.jpg"
+//			}, 0.0f, 345.0f),
+//			new BackgroundChain.Layer(new String[]{
+//				"bg_wall_down.jpg"
+//			}, 0.0f, 980.0f),
+//			new BackgroundChain.Layer(new String[]{
+//				"bg_roof_lights.png",
+//				"bg_roof_lights.png",
+//				"bg_roof_lights.png",
+//				"bg_roof_cables.png",
+//				"bg_roof_lights.png",
+//				"bg_roof_lights.png",
+//				"bg_roof_lights.png"
+//			}, 0.0f, 175.0f),
+//			new BackgroundChain.Layer(new String[]{
+//				"bg_floor.png",
+//				"bg_floor.png",
+//				"bg_floor.png",
+//				"bg_floor.png",
+//				"bg_floor.png",
+//				"bg_floor.png",
+//				"bg_floor.png",
+//				"bg_floor.png"
+//			}, 0.0f, 1035.0f)
+//		});
+//		chain.buildDecal(bgPatterns, decal);
+//		actors.getScene().attach(decal);
 		
 		player = new Player(getApplication().getAssets());
 		player.setPosition(player.getPositionX(), cam.getViewHeight() - player.getHeight() * 0.5f - 100.0f);
 		actors.attach(player);
-		
-		Random rand = new Random();
-		//if(rand.nextBoolean()){
-			Box b = Box.createRandBox(getApplication().getAssets());
-			actors.attach(b);
-			
-		//}
-		
-		//if(rand.nextBoolean()){
-			LightObstacle l = new LightObstacle(getApplication().getAssets());
-			actors.attach(l);
-			
-		//}
 		
 	}
 
@@ -123,11 +117,12 @@ public class GameState extends State
 	{
 		Camera2D cam = (Camera2D)actors.getScene().getCamera();
 		
-		float dt = 1.0f / 30.0f;
-		//float dt = getApplication().getTimer().getDeltaTime() * 0.001f;
-		//distance += dt * speed;
+		//float dt = 1.0f / 30.0f;
+		float dt = getApplication().getTimer().getDeltaTime() * 0.001f;
+		distance += dt * speed;
 		
-		//cam.setViewPosition(cam.getViewWidth()*0.5f + distance, cam.getViewHeight()*0.5f);
+		cam.setViewPosition(cam.getViewWidth()*0.5f + distance, cam.getViewHeight()*0.5f);
+		bg.setOnDistance(distance);
 		
 		player.setPosition(distance + player.getWidth(), player.getPositionY());
 		if(isFly)
@@ -139,6 +134,23 @@ public class GameState extends State
 			rocket.setMovement(new float[] {-5.0f *( new Random().nextFloat() + 1.0f)*50,0.0f});
 			actors.attach(rocket);
 			accel = 0.0f;
+		}
+		
+		accel_obstacle += dt;
+		
+		if(accel_obstacle > 3.0f){
+			Random rand = new Random();
+			if(rand.nextBoolean()){
+				Box b = Box.createRandBox(getApplication().getAssets());
+				actors.attach(b);
+			}
+			
+			if(rand.nextBoolean()){
+				LightObstacle l = new LightObstacle(getApplication().getAssets());
+				actors.attach(l);
+			}
+			
+			accel_obstacle = 0.0f;
 		}
 		
 		actors.update(dt);

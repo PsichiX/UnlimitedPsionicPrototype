@@ -9,8 +9,8 @@
       <Sampler0
          name="uSamp"
          image="drawable/background"
-         filteringMin="NEAREST"
-         filteringMag="NEAREST"
+         filteringMin="LINEAR"
+         filteringMag="LINEAR"
          wrappingVertical="REPEAT"
          wrappingHorizontal="REPEAT"
          />

@@ -16,13 +16,14 @@ public class Background extends Sprite {
 	
 	public Background(XeAssets assets, Camera2D cam){
 		super(null);
-		/*Material bgMat = (Material) assets.get(R.raw.material,Material.class);
+		Material bgMat = (Material) assets.get(R.raw.material,Material.class);
 		Image bgImage = (Image) assets.get(R.drawable.background,Image.class);
 		size = (float)bgImage.getTexture().getWidth();
 		setMaterial(bgMat);
-		setSize(cam.getViewWidth(), cam.getViewHeight());
-		setTextureScaleFromImageAspect(bgImage, true);
-		setOffsetFromSize(0.5f, 0.5f);*/
+		setSizeFromImage(bgImage);
+		//setSize(cam.getViewWidth(), cam.getViewHeight());
+		//setTextureScaleFromImageAspect(bgImage, false);
+		//setOffsetFromSize(0.5f, 0.5f);
 	}
 	
 	public void setOnDistance(float distance) {
@@ -30,6 +31,7 @@ public class Background extends Sprite {
 		float d = (size != 0.0f) ? distance/size : 0.0f;
 		
 		setTextureOffset(d, 0.0f);
+		setPosition(distance, 0.0f);
 	}
 
 }

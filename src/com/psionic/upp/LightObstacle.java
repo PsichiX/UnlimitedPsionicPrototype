@@ -19,7 +19,7 @@ public class LightObstacle extends Actor {
 	public void onAttach(ActorsManager am){
 		float [] pos = calculateMinMaxPosition();
 		
-		setPosition(pos[2]-getWidth() - 500.0f, pos[1]);
+		setPosition(pos[2], pos[1]);
 		
 		super.onAttach(am);
 	}

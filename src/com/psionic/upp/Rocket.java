@@ -37,4 +37,10 @@ public class Rocket extends Actor
 		
 		super.onAttach(am);
 	}
+	
+	@Override
+	public void onCollisionWith(Actor actor)
+	{
+		kill();
+	}
 }
