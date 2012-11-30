@@ -2,7 +2,9 @@ package com.psionic.upp;
 
 import java.util.Random;
 
+import com.PsichiX.XenonCoreDroid.XeApplication.Touch;
 import com.PsichiX.XenonCoreDroid.XeAssets;
+import com.PsichiX.XenonCoreDroid.XeApplication.Touches;
 import com.PsichiX.XenonCoreDroid.XeUtils.Matrix;
 
 public class Box extends Actor {
@@ -26,6 +28,16 @@ public class Box extends Actor {
 	public Box(XeAssets assets, int sheetResId, String subImage) {
 		super(assets, sheetResId, subImage);
 		
+	}
+	
+	@Override
+	public void input(Touches touches)
+	{
+		Touch t = touches.getTouchByState(Touch.State.DOWN);
+		if(t != null)
+		{
+			//float[] loc = 
+		}
 	}
 	
 	@Override
