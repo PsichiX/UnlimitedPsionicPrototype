@@ -136,5 +136,4 @@ public class Actor extends Sprite {
 		if(getOwner() != null)
 			getOwner().detach(this);
 	}
-
 }

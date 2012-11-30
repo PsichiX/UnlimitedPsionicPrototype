@@ -34,5 +34,7 @@ public class Rocket extends Actor
 		Random rand = new Random();
 		float randPosY = pos [1] + (pos[3] - pos[1]) * rand.nextFloat();
 		setPosition(pos[2]-getWidth(), randPosY);
+		
+		super.onAttach(am);
 	}
 }

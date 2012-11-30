@@ -1,11 +1,9 @@
 package com.psionic.upp;
 
-import java.util.LinkedList;
 import java.util.Random;
 
 import com.PsichiX.XenonCoreDroid.XeAssets;
 import com.PsichiX.XenonCoreDroid.XeUtils.Matrix;
-import com.psionic.upp.R.raw;
 
 public class Box extends Actor {
 
@@ -41,6 +39,8 @@ public class Box extends Actor {
 		float [] pos = calculateMinMaxPosition();
 		
 		setPosition(pos[2]-getWidth(), pos[3]);
+		
+		super.onAttach(am);
 	}
 	
 	// TODO check conditions

@@ -97,11 +97,17 @@ public class GameState extends State
 		actors.attach(player);
 		
 		Random rand = new Random();
-		if(rand.nextBoolean()){
+		//if(rand.nextBoolean()){
 			Box b = Box.createRandBox(getApplication().getAssets());
 			actors.attach(b);
 			
-		}
+		//}
+		
+		//if(rand.nextBoolean()){
+			LightObstacle l = new LightObstacle(getApplication().getAssets());
+			actors.attach(l);
+			
+		//}
 		
 	}
 
