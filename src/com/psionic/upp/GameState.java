@@ -1,5 +1,7 @@
 package com.psionic.upp;
 
+import java.util.Random;
+
 import com.PsichiX.XenonCoreDroid.XeApplication.State;
 import com.PsichiX.XenonCoreDroid.XeApplication.Touch;
 import com.PsichiX.XenonCoreDroid.XeApplication.Touches;
@@ -93,6 +95,14 @@ public class GameState extends State
 		player = new Player(getApplication().getAssets());
 		player.setPosition(player.getPositionX(), cam.getViewHeight() - player.getHeight() * 0.5f - 100.0f);
 		actors.attach(player);
+		
+		Random rand = new Random();
+		if(rand.nextBoolean()){
+			Box b = Box.createRandBox(getApplication().getAssets());
+			actors.attach(b);
+			
+		}
+		
 	}
 
 	@Override
@@ -117,15 +127,13 @@ public class GameState extends State
 		if(isFly)
 			player.setGravityY(player.getGravityY() - 1500.0f*dt);
 		
-		/*accel += dt;
+		accel += dt;
 		if(accel > 4.0f){
-			Rocket rocket = new Rocket(getApplication().getAssets(), R.raw.dynamics, "rocket.png");
-			rocket.setPosition(cam.getViewPositionX() + cam.getViewWidth()*0.5f + rocket.getWidth(), new Random().nextFloat() * cam.getViewHeight());
-			rocket.setMovement(new float[] {-5.0f * new Random().nextFloat()*50,0.0f});
+			Rocket rocket = new Rocket(getApplication().getAssets());
+			rocket.setMovement(new float[] {-5.0f *( new Random().nextFloat() + 1.0f)*50,0.0f});
 			actors.attach(rocket);
-			
 			accel = 0.0f;
-		}*/
+		}
 		
 		actors.update(dt);
 	}

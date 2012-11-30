@@ -128,12 +128,13 @@ public class Actor extends Sprite {
 	
 	public void onCollisionWith(Actor actor)
 	{
-		Log.d("COLLISION","COLLISION");
+		//Log.d("COLLISION","COLLISION");
 	}
 		
 	public void kill()
 	{
-		getOwner().detach(this);
+		if(getOwner() != null)
+			getOwner().detach(this);
 	}
 
 }

@@ -94,4 +94,9 @@ public class ActorsManager
 		actors.clear();
 		scene.detachAll();
 	}
+	
+	public LinkedList<Actor> getActors()
+	{
+		return actors;
+	}
 }
