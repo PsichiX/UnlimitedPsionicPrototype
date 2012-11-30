@@ -3,48 +3,77 @@ package com.psionic.upp;
 import android.util.Log;
 
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Camera2D;
-import com.PsichiX.XenonCoreDroid.XeApplication.Touch;
 import com.PsichiX.XenonCoreDroid.XeApplication.Touches;
 import com.PsichiX.XenonCoreDroid.XeAssets;
+import com.PsichiX.XenonCoreDroid.XeUtils.MathHelper;
 import com.PsichiX.XenonCoreDroid.XeUtils.Matrix;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Sprite;
 import com.psionic.upp.helper.SpriteSheet;
 
 public class Actor extends Sprite {
 	
-	public static final float gravityYconst = 350.0f;
+	public static final float gravityYconst = 500.0f;
 	
-	float [] movement = new float[] { 0.0f, 0.0f };
-	float gravityY = 0.0f;
-
-	float radius;
+	private ActorsManager owner;
+	protected SpriteSheet sheet;
+	private float[] movement = new float[]{0.0f, 0.0f};
+	private float gravityY = 0.0f;
+	private float radius;
 	
-	boolean canGravity = true;
-	
-	public Actor(XeAssets assets, int sheetResId, String subImage) {
+	public Actor(XeAssets assets, int sheetResId, String subImage)
+	{
 		super(null);
-		SpriteSheet sheet = (SpriteSheet)assets.get(sheetResId, SpriteSheet.class);
+		sheet = (SpriteSheet)assets.get(sheetResId, SpriteSheet.class);
 		sheet.getSubImage(subImage).apply(this);
 		setOffsetFromSize(0.5f, 0.5f);
 		
-		radius = getHeight();
+		radius = MathHelper.vecLength(getWidth() * 0.5f, getHeight() * 0.5f, 0.0f);
 	}
 	
-	public void setMovement(float[] mv) {
+	public void onAttach(ActorsManager man)
+	{
+		owner = man;
+	}
+	
+	public void onDetach(ActorsManager man)
+	{
+		owner = null;
+	}
+	
+	public ActorsManager getOwner()
+	{
+		return owner;
+	}
+	
+	public float[] calculateMinMaxPosition()
+	{
+		Camera2D camera = (Camera2D)(getScene().getCamera());
+		return new float[]{
+			camera.getViewPositionX() - (camera.getViewWidth() - getWidth()) * 0.5f,
+			getHeight() * 0.5f + 300.0f,
+			camera.getViewPositionX() + (camera.getViewWidth() + getWidth()) * 0.5f,
+			camera.getViewHeight() - getHeight() * 0.5f - 100.0f
+		};
+	}
+	
+	public void setMovement(float[] mv)
+	{
 		movement = mv;
 	}
 	
-	public void setGravityY(float gv){
+	public float[] getMovement()
+	{
+		return movement;
+	}
+	
+	public void setGravityY(float gv)
+	{
 		gravityY = gv;
 	}
 	
 	public float getGravityY()
 	{
 		return gravityY;
-	}
-	
-	public void setCanGravity(boolean cg){
-		canGravity = cg;
 	}
 	
 	public void setRadius(float r){
@@ -56,10 +85,10 @@ public class Actor extends Sprite {
 	}
 	
 	@Override
-	public void update(float dt, Matrix cam){
+	public void update(float dt, Matrix cam)
+	{
+		float[] minMaxPos = calculateMinMaxPosition();		
 		
-		Camera2D camera = (Camera2D)(getScene().getCamera());
-			
 		gravityY += gravityYconst * dt;
 		
 		float move_x = movement[0]*dt;
@@ -67,16 +96,18 @@ public class Actor extends Sprite {
 		
 		setPosition(getPositionX() + move_x, getPositionY() + move_y); 
 		
-		if(getPositionY() > camera.getViewHeight() - getHeight()*0.5f){
-			gravityY=0.0f;
-			setPosition(getPositionX(),camera.getViewHeight() - getHeight()*0.5f);
-		} else if(getPositionY() < getHeight()*0.5f){
-			gravityY = 0.0f;
-			setPosition(getPositionX(), getHeight()*0.5f);
-		}
-		
-		if(getPositionX() < camera.getViewPositionX() - camera.getViewWidth() - getWidth())
+		if(getPositionX() < minMaxPos[0] || getPositionX() > minMaxPos[2])
 			kill();
+		if(getPositionY() < minMaxPos[1])
+		{
+			gravityY = 0.0f;
+			setPosition(getPositionX(), minMaxPos[1]);
+		}
+		else if(getPositionY() > minMaxPos[3])
+		{
+			gravityY = 0.0f;
+			setPosition(getPositionX(), minMaxPos[3]);
+		}
 		
 		super.update(dt, cam);
 	}
@@ -92,10 +123,7 @@ public class Actor extends Sprite {
 		float dy = getPositionY() - actor.getPositionY();
 		
 		if(sum_r*sum_r > (dx*dx + dy*dy))
-			actor.onCollisionWith(this);
-		
-		//Log.w("collision test","sum_r:" + sum_r);
-		//Log.w("collision test","dx:" + dx + " dy:"+dy);
+			onCollisionWith(actor);
 	}
 	
 	public void onCollisionWith(Actor actor)
@@ -105,7 +133,7 @@ public class Actor extends Sprite {
 		
 	public void kill()
 	{
-		GameState.hitAct.add(this);
+		getOwner().detach(this);
 	}
 
 }

@@ -1,49 +1,21 @@
 package com.psionic.upp;
 
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
-
-import android.util.Log;
-
 import com.PsichiX.XenonCoreDroid.XeApplication.State;
 import com.PsichiX.XenonCoreDroid.XeApplication.Touch;
 import com.PsichiX.XenonCoreDroid.XeApplication.Touches;
-import com.PsichiX.XenonCoreDroid.XeUtils.CommandQueue;
-import com.PsichiX.XenonCoreDroid.XeUtils.RunnableQueue;
 import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Camera2D;
-import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Image;
-import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Material;
-import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Scene;
-import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Sprite;
 import com.PsichiX.XenonCoreDroid.XeEcho.*;
-import com.psionic.upp.helper.SpriteSheet;
 
 public class GameState extends State
 {
-	Camera2D cam;
-	Scene scn;
-	
-	Background background;
-	
-	boolean isFly = false;
-	
-	float distance;
-	float speed = 100.0f;
-	
-	Material rocketMat;
-	Image rocketImg;
-	
-	float accel = 0.0f;
-	
-	//public static RunnableQueue rq = new RunnableQueue();
-	
-	public static ArrayList<Actor> hitAct = new ArrayList<Actor>();
-	
+	BackgroundChain.Pattern[] bgPatterns;
+	ActorsManager actors;
 	Player player;
 	
-	public static ArrayList<Actor> actors = new ArrayList<Actor>();
+	boolean isFly = false;
+	float distance;
+	float speed = 100.0f;
+	float accel = 0.0f;
 	
 	@Override
 	public void onEnter()
@@ -51,92 +23,111 @@ public class GameState extends State
 		Music m = getApplication().getEcho().loadMusic("background_sound", R.raw.am_bg_sound);
 		m.play();
 		
-		scn = (Scene)getApplication().getAssets().get(R.raw.scene, Scene.class);
-		cam = (Camera2D)scn.getCamera();
-		cam.setViewPosition(cam.getViewWidth() * 0.5f, cam.getViewHeight() * 0.5f);
+		actors = new ActorsManager(getApplication().getAssets(), R.raw.scene);
+		Camera2D cam = (Camera2D)actors.getScene().getCamera();
 		
-		// dynamic actors spritesheet
-		//SpriteSheet sheet = (SpriteSheet)getApplication().getAssets().get(R.raw.dynamics, SpriteSheet.class);
-		
-		// background scroll
-		background = new Background(getApplication().getAssets(),cam);
-		scn.attach(background);
+		bgPatterns = new BackgroundChain.Pattern[]{
+			new BackgroundChain.Pattern("bg_floor.png", -68.0f, 0.0f, 212.0f, 0.0f, 281.0f, 170.0f),
+			new BackgroundChain.Pattern("bg_ground.jpg", 0.0f, 0.0f, 456.0f, 0.0f, 458.0f, 175.0f),
+			new BackgroundChain.Pattern("bg_roof_cables.png", -68.0f, 0.0f, 424.0f, 0.0f, 493.0f, 304.0f),
+			new BackgroundChain.Pattern("bg_roof_lights.png", -68.0f, 0.0f, 212.0f, 0.0f, 281.0f, 170.0f),
+			new BackgroundChain.Pattern("bg_wall.jpg", 0.0f, 0.0f, cam.getViewWidth(), 0.0f, cam.getViewWidth(), 585.0f),
+			new BackgroundChain.Pattern("bg_wall_down.jpg", 0.0f, 0.0f, cam.getViewWidth(), 0.0f, cam.getViewWidth(), 60.0f),
+			new BackgroundChain.Pattern("bg_wall_up.jpg", -68.0f, 0.0f, 210.0f, 0.0f, 212.0f, 59.0f)
+		};
 		
 		distance = 0.0f;
 		
-		player = new Player(getApplication().getAssets(), R.raw.dynamics, "proto.png");
-		scn.attach(player);
+		Decal decal = new Decal(getApplication().getAssets(), R.raw.dynamics);
+		/*decal.build(new Decal.BuildInfo(new Decal.BuildInfo.ImageInfo[]{
+			new Decal.BuildInfo.ImageInfo("bg_doors.png", 0.0f, 0.0f, 0.0f, 0.0f),
+			new Decal.BuildInfo.ImageInfo("bg_window.png", 300.0f, 0.0f, 0.0f, 0.0f),
+			new Decal.BuildInfo.ImageInfo("bg_ground.jpg", 150.0f, 300.0f, 0.0f, 0.0f)
+		}));*/
+		BackgroundChain chain = new BackgroundChain(new BackgroundChain.Layer[]{
+			new BackgroundChain.Layer(new String[]{
+				"bg_ground.jpg",
+				"bg_ground.jpg",
+				"bg_ground.jpg",
+				"bg_ground.jpg"
+			}, 0.0f, 0.0f),
+			new BackgroundChain.Layer(new String[]{
+				"bg_wall.jpg"
+			}, 0.0f, 398.0f),
+			new BackgroundChain.Layer(new String[]{
+				"bg_wall_up.jpg",
+				"bg_wall_up.jpg",
+				"bg_wall_up.jpg",
+				"bg_wall_up.jpg",
+				"bg_wall_up.jpg",
+				"bg_wall_up.jpg",
+				"bg_wall_up.jpg",
+				"bg_wall_up.jpg"
+			}, 0.0f, 345.0f),
+			new BackgroundChain.Layer(new String[]{
+				"bg_wall_down.jpg"
+			}, 0.0f, 980.0f),
+			new BackgroundChain.Layer(new String[]{
+				"bg_roof_lights.png",
+				"bg_roof_lights.png",
+				"bg_roof_lights.png",
+				"bg_roof_cables.png",
+				"bg_roof_lights.png",
+				"bg_roof_lights.png",
+				"bg_roof_lights.png"
+			}, 0.0f, 175.0f),
+			new BackgroundChain.Layer(new String[]{
+				"bg_floor.png",
+				"bg_floor.png",
+				"bg_floor.png",
+				"bg_floor.png",
+				"bg_floor.png",
+				"bg_floor.png",
+				"bg_floor.png",
+				"bg_floor.png"
+			}, 0.0f, 1035.0f)
+		});
+		chain.buildDecal(bgPatterns, decal);
+		actors.getScene().attach(decal);
 		
-		/*Material mat = (Material) getApplication().getAssets().get(R.raw.proto_material, Material.class);
-		Image actImg = (Image) getApplication().getAssets().get(R.drawable.proto, Image.class);
-		player = new Actor(mat,actImg);
-
-		actors.add(player);
-		player.setPosition(cam.getViewWidth() * 0.5f, cam.getViewHeight() * 0.5f);
-		scn.attach(background);
-		scn.attach(player);
-		
-		rocketMat = (Material) getApplication().getAssets().get(R.raw.rocket_material, Material.class);
-		rocketImg = (Image) getApplication().getAssets().get(R.drawable.rocket, Image.class);*/
-
-//		Material mat = (Material)getApplication().getAssets().get(R.raw.material, Material.class);
-//		Sprite spr = new Sprite(mat);
-//		SpriteSheet sheet = (SpriteSheet)getApplication().getAssets().get(R.raw.spritesheet, SpriteSheet.class);
-//		SpriteSheet.SubImage sub = sheet.getSubImage("schroom.png");
-//		sub.apply(spr);
-//		
-//		scn.attach(spr);
+		player = new Player(getApplication().getAssets());
+		player.setPosition(player.getPositionX(), cam.getViewHeight() - player.getHeight() * 0.5f - 100.0f);
+		actors.attach(player);
 	}
 
 	@Override
 	public void onReload()
 	{
+		Camera2D cam = (Camera2D)actors.getScene().getCamera();
 		cam.setViewPosition(cam.getViewWidth() * 0.5f, cam.getViewHeight() * 0.5f);
 	}
 
 	@Override
 	public void onUpdate()
 	{
-		//float dt = 1.0f / 30.0f;
-		float dt = getApplication().getTimer().getDeltaTime() * 0.001f;
-		distance += dt * speed;
-		background.setOnDistance(distance);
+		Camera2D cam = (Camera2D)actors.getScene().getCamera();
 		
-		accel += dt;
+		float dt = 1.0f / 30.0f;
+		//float dt = getApplication().getTimer().getDeltaTime() * 0.001f;
+		//distance += dt * speed;
 		
-		cam.setViewPosition(cam.getViewWidth()*0.5f + distance, cam.getViewHeight()*0.5f);
-		background.setPosition(cam.getViewPositionX(), cam.getViewPositionY());
+		//cam.setViewPosition(cam.getViewWidth()*0.5f + distance, cam.getViewHeight()*0.5f);
 		
 		player.setPosition(distance + player.getWidth(), player.getPositionY());
 		if(isFly)
-			player.setGravityY(player.getGravityY() - 50.0f);
+			player.setGravityY(player.getGravityY() - 1500.0f*dt);
 		
-//		for(Actor actA : actors){
-//			for(Actor actB : actors){
-//				if(actA != actB && )
-//					actA.testCollisionWith(actB);
-//			}
-		
-		for(Actor a: actors)
-		{
-			a.testCollisionWith(player);
-		}
-		
-		scn.update(dt);
-		
+		/*accel += dt;
 		if(accel > 4.0f){
 			Rocket rocket = new Rocket(getApplication().getAssets(), R.raw.dynamics, "rocket.png");
 			rocket.setPosition(cam.getViewPositionX() + cam.getViewWidth()*0.5f + rocket.getWidth(), new Random().nextFloat() * cam.getViewHeight());
 			rocket.setMovement(new float[] {-5.0f * new Random().nextFloat()*50,0.0f});
-			actors.add(rocket);
-			scn.attach(rocket);
+			actors.attach(rocket);
 			
 			accel = 0.0f;
-		}
+		}*/
 		
-		for(Actor a : hitAct)
-			scn.detach(a);
-		hitAct.clear();
+		actors.update(dt);
 	}
 
 	@Override
@@ -148,6 +139,8 @@ public class GameState extends State
 		t = ev.getTouchByState(Touch.State.UP);
 		if(t != null)
 			isFly = false;
+		
+		actors.input(ev);
 	}
 
 	@Override
@@ -155,8 +148,7 @@ public class GameState extends State
 	{
 		getApplication().getEcho().getMusic("background_sound").stop();
 		getApplication().getEcho().unloadAll();
-		actors.clear();
 		
-		scn.detachAll();
+		actors.cleanup();
 	}
 }

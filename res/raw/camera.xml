@@ -2,7 +2,7 @@
 
 <Camera2D
    aspect="SCREEN"
-   zoomOut="600"
+   zoomOut="1200"
    x="0"
    y="0"
    angle="0"
