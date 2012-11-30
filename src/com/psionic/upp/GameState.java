@@ -102,6 +102,7 @@ public class GameState extends State
 		player = new Player(getApplication().getAssets());
 		player.setPosition(player.getPositionX(), cam.getViewHeight() - player.getHeight() * 0.5f - 100.0f);
 		actors.attach(player);
+		actors.setPlayer(player);
 		
 	}
 

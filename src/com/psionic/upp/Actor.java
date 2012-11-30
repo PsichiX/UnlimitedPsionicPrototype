@@ -131,7 +131,7 @@ public class Actor extends Sprite {
 		
 		setPosition(getPositionX() + move_x, getPositionY() + move_y); 
 		
-		if(getPositionX() < minMaxPos[0] || getPositionX() > minMaxPos[2])
+		if(getPositionX() + getWidth() < minMaxPos[0] /*|| getPositionX() > minMaxPos[2]*/)
 			kill();
 		if(getPositionY() < minMaxPos[1])
 		{

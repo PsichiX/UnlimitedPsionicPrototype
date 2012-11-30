@@ -28,7 +28,7 @@ public class Rocket extends Actor
 		float [] pos = calculateMinMaxPosition();
 		Random rand = new Random();
 		float randPosY = pos [1] + (pos[3] - pos[1]) * rand.nextFloat();
-		setPosition(pos[2]-getWidth(), randPosY);
+		setPosition(pos[2], randPosY);
 		
 		super.onAttach(am);
 	}

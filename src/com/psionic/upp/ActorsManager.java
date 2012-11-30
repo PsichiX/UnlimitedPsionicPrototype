@@ -16,6 +16,12 @@ public class ActorsManager
 	private LinkedList<Actor> actorsToAttach = new LinkedList<Actor>();
 	private LinkedList<Actor> actorsToDetach = new LinkedList<Actor>();
 	
+	private Player player;
+	
+	public void setPlayer(Player p){
+		player = p;
+	}
+	
 	public ActorsManager(Scene scn)
 	{
 		scene = scn;
@@ -78,6 +84,7 @@ public class ActorsManager
 			for(Actor a2 : actors)
 				if(a1 != a2)
 					a1.bboxTestCollisionWith(a2);
+		
 	}
 	
 	public void input(Touches touches)

@@ -50,7 +50,7 @@ public class Box extends Actor {
 	public void onAttach(ActorsManager am){
 		float [] pos = calculateMinMaxPosition();
 		
-		setPosition(pos[2]-getWidth(), pos[3]);
+		setPosition(pos[2], pos[3]);
 		
 		;
 		super.onAttach(am);
