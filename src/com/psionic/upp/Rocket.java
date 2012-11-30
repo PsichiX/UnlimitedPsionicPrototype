@@ -2,12 +2,7 @@ package com.psionic.upp;
 
 import java.util.Random;
 
-import android.util.Log;
-
 import com.PsichiX.XenonCoreDroid.XeAssets;
-import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Camera2D;
-import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Image;
-import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Material;
 import com.PsichiX.XenonCoreDroid.XeUtils.Matrix;
 
 public class Rocket extends Actor

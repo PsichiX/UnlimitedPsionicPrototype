@@ -8,6 +8,7 @@ import com.PsichiX.XenonCoreDroid.HighLevel.Graphics.Sprite;
 import com.PsichiX.XenonCoreDroid.XeApplication.State;
 import com.PsichiX.XenonCoreDroid.XeApplication.Touch;
 import com.PsichiX.XenonCoreDroid.XeApplication.Touches;
+import com.PsichiX.XenonCoreDroid.XeEcho.Music;
 
 public class MenuState extends State {
 	
@@ -19,6 +20,9 @@ public class MenuState extends State {
 	@Override
 	public void onEnter()
 	{
+		Music m = getApplication().getEcho().loadMusic("menu_sound", R.raw.menu);
+		m.play();
+		
 		scn = (Scene)getApplication().getAssets().get(R.raw.scene, Scene.class);
 		cam = (Camera2D)scn.getCamera();
 		cam.setViewPosition(cam.getViewWidth() * 0.5f, cam.getViewHeight() * 0.5f);
@@ -61,6 +65,9 @@ public class MenuState extends State {
 	@Override
 	public void onExit()
 	{
+		getApplication().getEcho().getMusic("menu_sound").stop();
+		getApplication().getEcho().unloadAll();
+		
 		scn.detachAll();
 	}
 	

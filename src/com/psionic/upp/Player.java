@@ -11,6 +11,7 @@ public class Player extends Actor
 {
 	ForcesManager forces = new ForcesManager();
 	
+	
 	public Player(XeAssets assets)
 	{
 		super(assets, R.raw.dynamics, "monster_fly.png");

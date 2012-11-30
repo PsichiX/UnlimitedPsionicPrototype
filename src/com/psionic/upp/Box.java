@@ -16,7 +16,7 @@ public class Box extends Actor {
 		Random r = new Random();
 		String obstacleStr = groundObstacles[r.nextInt(groundObstacles.length)];
 		// everything but box should have lower possibility to show
-		if(obstacleStr.equals(groundObstacles[0])) 
+		if(!obstacleStr.equals(groundObstacles[0])) 
 			obstacleStr = groundObstacles[r.nextInt(groundObstacles.length)];
 		return new Box(assets,R.raw.dynamics,obstacleStr);
 	}
@@ -52,6 +52,7 @@ public class Box extends Actor {
 		
 		setPosition(pos[2]-getWidth(), pos[3]);
 		
+		;
 		super.onAttach(am);
 	}
 	
