@@ -36,7 +36,8 @@ public class Box extends Actor {
 		Touch t = touches.getTouchByState(Touch.State.DOWN);
 		if(t != null)
 		{
-			//float[] loc = 
+			float[] loc = getScene().getCamera().convertLocationScreenToWorld(t.getX(), t.getY(), -1.0f);
+			
 		}
 	}
 	

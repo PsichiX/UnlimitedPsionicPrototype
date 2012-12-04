@@ -32,7 +32,6 @@ public class MenuState extends State {
 		
 		background = new Sprite(matBg);
 		background.setSize(cam.getViewWidth(), cam.getViewHeight());
-		background.setTextureScaleFromImageAspect(bgImg, true);
 		
 		scn.attach(background);
 	}
@@ -69,6 +68,8 @@ public class MenuState extends State {
 		getApplication().getEcho().unloadAll();
 		
 		scn.detachAll();
+		getApplication().getAssets().free(R.raw.menu_bg_mat);
+		getApplication().getAssets().free(R.drawable.menu_bg);
 	}
 	
 }

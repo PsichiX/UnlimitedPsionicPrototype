@@ -17,7 +17,7 @@ public class GameState extends State
 	
 	boolean isFly = false;
 	float distance = 0.0f;
-	float speed = 500.0f;
+	float speed = 300.0f;
 	float accel = 0.0f;
 	
 	float accel_obstacle = 0.0f;
@@ -177,5 +177,8 @@ public class GameState extends State
 		getApplication().getEcho().unloadAll();
 		
 		actors.cleanup();
+		
+		getApplication().getAssets().free(R.raw.material);
+		getApplication().getAssets().free(R.drawable.background);
 	}
 }

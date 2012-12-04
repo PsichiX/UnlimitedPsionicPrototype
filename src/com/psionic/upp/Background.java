@@ -18,11 +18,11 @@ public class Background extends Sprite {
 		super(null);
 		Material bgMat = (Material) assets.get(R.raw.material,Material.class);
 		Image bgImage = (Image) assets.get(R.drawable.background,Image.class);
-		size = (float)bgImage.getTexture().getWidth();
+		size = (float)bgImage.getTexture().getWidth() * 2.0f;
 		setMaterial(bgMat);
 		setSizeFromImage(bgImage);
-		//setSize(cam.getViewWidth(), cam.getViewHeight());
-		//setTextureScaleFromImageAspect(bgImage, false);
+		setSize((float)bgImage.getTexture().getWidth() * 2.0f, (float)bgImage.getTexture().getHeight() * 2.0f);
+		//setTextureScaleFromImageAspect(bgImage, true);
 		//setOffsetFromSize(0.5f, 0.5f);
 	}
 	
